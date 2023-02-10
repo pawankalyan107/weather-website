@@ -10,7 +10,9 @@ const forecast = (latitude, longitude, cb) => {
       cb('Unable to find location', undefined)
     } else {
       const currentWeather = body.current;
-      cb(undefined, `${currentWeather.weather_descriptions[0]} It is currently ${currentWeather.temperature} degrees out. it feels like ${currentWeather.feelslike} degrees out.`)
+      const fahrenheitData = `${currentWeather.weather_descriptions[0]} It is currently ${currentWeather.temperature} degree fahrenheit out. it feels like ${currentWeather.feelslike} degrees fahrenheit out.`
+      const celsiusData = `${currentWeather.weather_descriptions[0]} It is currently ${((currentWeather.temperature - 32) * 5 / 9).toFixed()} degree celsius out. it feels like ${((currentWeather.feelslike - 32) * (5 / 9)).toFixed()} degrees celsius out.`
+      cb(undefined, fahrenheitData, celsiusData)
     }
   })
 }
