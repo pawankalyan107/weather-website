@@ -11,7 +11,7 @@ const forecast = (latitude, longitude, cb) => {
     } else {
       const currentWeather = body.current;
       const fahrenheitData = `${currentWeather.weather_descriptions[0]} It is currently ${currentWeather.temperature} degree fahrenheit out. it feels like ${currentWeather.feelslike} degrees fahrenheit out.`
-      const celsiusData = `${currentWeather.weather_descriptions[0]} It is currently ${((currentWeather.temperature - 32) * 5 / 9).toFixed()} degree celsius out. it feels like ${((currentWeather.feelslike - 32) * (5 / 9)).toFixed()} degrees celsius out.`
+      const celsiusData = `${currentWeather.weather_descriptions[0]} It is currently ${((currentWeather.temperature - 32) * 5 / 9).toFixed()} degree celsius out. it feels like ${((currentWeather.feelslike - 32) * (5 / 9)).toFixed()} degrees celsius out. Humidity is ${currentWeather.humidity}`
       cb(undefined, fahrenheitData, celsiusData)
     }
   })
