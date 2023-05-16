@@ -41,31 +41,58 @@ app.get('/help', (req, res) => {
   })
 })
 
-app.get('/weather', (req, res) => {
-  if (!req.query.address) {
+app.get('/currentLocation', (req, res) => {
+  const { location } = req.query;
+
+  if (!location) {
     return res.send({
-      error: 'you must provide the address'
-    })
-  } else {
-    geocode(req.query.address, (error, { latitude, longitude, location } = {}) => {
-      if (error) {
-        return res.send({ error })
-      } else {
-        forecast(latitude, longitude, (error, forecastData, celsiusData) => {
-          if (error) {
-            return res.send({ error })
-          }
-          res.send({
-            celsius: celsiusData,
-            forecast: forecastData,
-            location,
-            address: req.query.address
-          })
-        })
-      }
-    })
+      error: 'Unable to find the location'
+    });
   }
-})
+
+  const { lat, lon } = JSON.parse(location);
+
+  forecast(lat, lon, (error, forecastData, celsiusData) => {
+    if (error) {
+      return res.send({ error });
+    }
+
+    res.send({
+      celsius: celsiusData,
+      forecast: forecastData,
+    });
+  });
+});
+
+app.get('/weather', (req, res) => {
+  const { address } = req.query;
+
+  if (!address) {
+    return res.send({
+      error: 'You must provide the address'
+    });
+  }
+
+  geocode(address, (error, { latitude, longitude, location } = {}) => {
+    if (error) {
+      return res.send({ error });
+    }
+
+    forecast(latitude, longitude, (error, forecastData, celsiusData) => {
+      if (error) {
+        return res.send({ error });
+      }
+
+      res.send({
+        celsius: celsiusData,
+        forecast: forecastData,
+        location,
+        address
+      });
+    });
+  });
+});
+
 
 app.get('/products', (req, res) => {
   if (!req.query.search) {
